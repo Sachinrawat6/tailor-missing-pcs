@@ -1,0 +1,28 @@
+/**
+ * Animated spinner circle.
+ * @param {string} className - extra Tailwind classes (size, color)
+ */
+export default function Spinner({ className = "w-6 h-6 text-indigo-600" }) {
+  return (
+    <svg
+      className={`animate-spin ${className}`}
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-label="Loading"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8z"
+      />
+    </svg>
+  );
+}

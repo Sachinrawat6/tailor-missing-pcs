@@ -38,6 +38,7 @@ function EditIcon() {
 
 export default function RecordCard({
   record,
+  props,
   isEditing,
   editValue,
   onEditStart,
@@ -46,6 +47,10 @@ export default function RecordCard({
   onSave,
   saving,
 }) {
+  const getMatchedCreatedAt = (orderId) => {
+    const createdAt = props.find((item) => item.order_id === orderId)?.created_at;
+    return createdAt;
+  };
   return (
     <div
       className={`bg-white rounded-2xl border transition-all duration-200 overflow-hidden
@@ -70,14 +75,27 @@ export default function RecordCard({
             <p className="text-xs text-gray-400">
               Order ID: <span className="text-gray-700 font-semibold">#{record.order_id}</span>
             </p>
+
+            {/* Created At and Scanned in same row */}
             {!isEditing && (
-              <>
-                <p className="text-xs text-gray-400 mt-0.5">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-0.5">
+                <p className="text-xs text-gray-400">
+                  Created At:{' '}
+                  <span className="text-gray-700 font-semibold">
+                    {formatTimestamp(getMatchedCreatedAt(record.order_id))}
+                  </span>
+                </p>
+                <p className="text-xs text-gray-400">
                   Scanned:{' '}
                   <span className="text-gray-700 font-medium">
                     {formatTimestamp(record.scanned_timestamp)}
                   </span>
                 </p>
+              </div>
+            )}
+
+            {!isEditing && (
+              <>
                 <p className="text-xs text-gray-400 mt-0.5">
                   Style No:{' '}
                   <span className="text-gray-700 font-medium">{record.orders_2?.style_number}</span>

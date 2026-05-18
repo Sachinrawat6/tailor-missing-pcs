@@ -296,6 +296,7 @@ export default function ScanRecordList({ adminUser, targetEmployee, onChangeEmpl
               {records.map((record) => (
                 <RecordCard
                   key={record.system_id}
+                  props={orders}
                   record={record}
                   isEditing={editingId === record.system_id}
                   editValue={editValue}

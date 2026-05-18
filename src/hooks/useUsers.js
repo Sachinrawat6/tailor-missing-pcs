@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { fetchUsers } from "../api/users";
+import { useState, useEffect, useCallback } from 'react';
+import { fetchUsers } from '../api/users';
 
 /**
  * Fetches the employee list from the API.
@@ -17,7 +17,7 @@ export function useUsers() {
       const list = await fetchUsers();
       setUsers(list);
     } catch (err) {
-      setError(err.message || "Users load nahi hue. Dobara try karein.");
+      setError(err.message || 'Failed to fetch users. Please try again.');
     } finally {
       setLoading(false);
     }

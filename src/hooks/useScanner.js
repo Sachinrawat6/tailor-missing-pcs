@@ -1,13 +1,17 @@
-import { useState, useCallback } from "react";
-import { syncOrders, scanOrder } from "../api/orders";
-import { SCAN_STATUS, LOG_TYPE } from "../constants";
+import { useState, useCallback } from 'react';
+import { syncOrders, scanOrder } from '../api/orders';
+import { SCAN_STATUS, LOG_TYPE } from '../constants';
 
 function createLog(message, type = LOG_TYPE.INFO) {
   return {
     id: `${Date.now()}-${Math.random()}`,
     message,
     type,
-    time: new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+    time: new Date().toLocaleTimeString('en-IN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    }),
   };
 }
 
@@ -46,7 +50,7 @@ export function useScanner(userId) {
       try {
         orders = await syncOrders(styleNumber, size);
         setSyncedCount(orders.length);
-        pushLog(`${orders.length} order(s) sync hua.`, LOG_TYPE.SUCCESS);
+        pushLog(`${orders.length} order(s) synced.`, LOG_TYPE.SUCCESS);
       } catch (err) {
         pushLog(`Sync failed: ${err.message}`, LOG_TYPE.ERROR);
         setStatus(SCAN_STATUS.ERROR);
@@ -54,7 +58,7 @@ export function useScanner(userId) {
       }
 
       if (orders.length === 0) {
-        pushLog("Koi order sync nahi hua, scan skip.", LOG_TYPE.WARN);
+        pushLog('No orders to scan.', LOG_TYPE.WARN);
         setStatus(SCAN_STATUS.DONE);
         return;
       }
@@ -67,10 +71,7 @@ export function useScanner(userId) {
         const orderId = order?.order_id ?? order?.id ?? order?.orderId;
 
         if (!orderId) {
-          pushLog(
-            `Order ID nahi mila: ${JSON.stringify(order).slice(0, 60)}`,
-            LOG_TYPE.WARN
-          );
+          pushLog(`Order ID not found: ${JSON.stringify(order).slice(0, 60)}`, LOG_TYPE.WARN);
           continue;
         }
 
@@ -78,7 +79,7 @@ export function useScanner(userId) {
           await scanOrder(orderId, userId);
           scanned++;
           setScannedCount(scanned);
-          pushLog(`Order #${orderId} scan ho gaya.`, LOG_TYPE.SUCCESS);
+          pushLog(`Order #${orderId} scan completed.`, LOG_TYPE.SUCCESS);
         } catch (err) {
           pushLog(`Order #${orderId} scan error: ${err.message}`, LOG_TYPE.ERROR);
         }
@@ -86,15 +87,14 @@ export function useScanner(userId) {
 
       setStatus(SCAN_STATUS.DONE);
       pushLog(
-        `Complete! ${scanned}/${orders.length} orders scan hue.`,
+        `Complete! ${scanned}/${orders.length} orders scan completed.`,
         scanned === orders.length ? LOG_TYPE.SUCCESS : LOG_TYPE.WARN
       );
     },
     [userId, pushLog, reset]
   );
 
-  const isLoading =
-    status === SCAN_STATUS.SYNCING || status === SCAN_STATUS.SCANNING;
+  const isLoading = status === SCAN_STATUS.SYNCING || status === SCAN_STATUS.SCANNING;
 
   return {
     status,
